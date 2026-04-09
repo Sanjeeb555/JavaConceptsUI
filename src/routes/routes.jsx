@@ -51,6 +51,7 @@ import Map from '../dashboard/dashboardPages/collectionFramework/Map';
 import InterviewQuestion from '../dashboard/dashboardPages/interviewquestion/InterviewQuestion';
 import ExceptionHandling from '../dashboard/dashboardPages/exceptionHandling/ExceptionHandling';
 import List from '../dashboard/dashboardPages/collectionFramework/List';
+import DashboardHome from '../dashboard/DashboardHome';
 
 const routes = createBrowserRouter([
   {
@@ -81,6 +82,10 @@ const routes = createBrowserRouter([
           <Dashboard />
         </PrivateRouting>,
         children: [
+          {
+            index: true,   
+            element: <DashboardHome />
+          },
           {
             path:"introduction",
             element:<Introduction/>

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import { Coffee, CheckCircle } from "lucide-react";
 
 import hierarchyImage from "../../../assets/WrapperClass/WrapperClass1.jpg";
+import useFetch from "../../../hooks/useFetch";
 
 const ICONS = {
   java: <Coffee className="text-purple-600 dark:text-purple-300" size={24} />,
@@ -67,21 +67,13 @@ const ContentCard = ({ section }) => {
 };
 
 const WrapperClass = () => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
+  const { data, loading, error } = useFetch("/wrapperClass", null);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/wrapperClass")
-      .then((response) => setData(response.data))
-      .catch(() => setError("Failed to load data"));
-  }, []);
-
-  if (error)
+  if (loading) return <p className="text-center mt-10">Loading...</p>;
+  if (error || !data)
     return (
-      <p className="text-center mt-10 text-red-600 font-semibold">{error}</p>
+      <p className="text-center mt-10 text-red-600 font-semibold">{error || "Failed to load data."}</p>
     );
-  if (!data) return <p className="text-center mt-10">Loading...</p>;
 
   const { header, sections } = data;
 

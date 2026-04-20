@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import { Download, Settings, PlayCircle, Code } from "lucide-react";
 import { TiInputChecked } from "react-icons/ti";
+import useFetch from "../../../hooks/useFetch";
 
 const iconMap = {
   Download: <Download className="text-purple-600 dark:text-purple-300" size={24} />,
@@ -11,14 +11,7 @@ const iconMap = {
 };
 
 const Installations = () => {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/install")
-      .then((res) => setData(res.data))
-      .catch((err) => console.log(err));
-  }, []);
+  const { data } = useFetch("/install");
 
   return (
     <div className="w-full py-8 px-4">

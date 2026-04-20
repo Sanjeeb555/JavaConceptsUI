@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
+import useFetch from "../../../hooks/useFetch";
 
 const Encapsulation = () => {
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/encapsulation")
-      .then((res) => setCards(res.data.cards))
-      .catch((err) => console.error(err));
-  }, []);
+  const { data: rawData } = useFetch("/encapsulation", null);
+  const cards = rawData?.cards ?? [];
 
   return (
     <div className="p-6">

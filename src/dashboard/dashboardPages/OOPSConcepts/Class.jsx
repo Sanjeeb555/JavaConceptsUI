@@ -1,7 +1,7 @@
-  import React, { useEffect, useState } from "react";
-  import axios from "axios";
-  import { BookOpen, Box, Layers, Code } from "lucide-react";
-  import { TiInputChecked } from "react-icons/ti";
+import React from "react";
+import { BookOpen, Box, Layers, Code } from "lucide-react";
+import { TiInputChecked } from "react-icons/ti";
+import useFetch from "../../../hooks/useFetch";
 
   const iconMap = {
     BookOpen: <BookOpen className="text-purple-600" size={24} />,
@@ -11,14 +11,7 @@
   };
 
   const Class = () => {
-    const [data, setData] = useState([]);
-
-    useEffect(() => {
-      axios
-        .get("http://localhost:3000/classes")
-        .then((res) => setData(res.data))
-        .catch((err) => console.log(err));
-    }, []);
+    const { data } = useFetch("/classes");
 
     return (
       <div className="min-h-screen w-full py-8 px-4">

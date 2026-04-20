@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import { Type, CheckCircle, XCircle, BookOpen } from "lucide-react";
 import { TiInputChecked } from "react-icons/ti";
+import useFetch from "../../../hooks/useFetch";
 
 const iconMap = {
   Type: <Type className="text-purple-600 dark:text-purple-300" size={24} />,
@@ -11,11 +11,7 @@ const iconMap = {
 };
 
 const Identifier = () => {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    axios.get("http://localhost:3000/identifier").then((res) => setData(res.data)).catch((err) => console.log(err));
-  }, []);
+  const { data } = useFetch("/identifier");
 
   return (
     <div className="min-h-screen w-full py-8 px-4">

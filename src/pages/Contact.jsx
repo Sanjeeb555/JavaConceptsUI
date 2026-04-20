@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Send, User, Mail, MessageSquare, Phone } from "lucide-react";
 import { toast } from "react-toastify";
+import api from "../lib/api";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -30,18 +31,12 @@ const Contact = () => {
 
     const next = queue[0];
     try {
-      const response = await fetch("http://localhost:3000/contacts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(next),
-      });
-
-      if (response.ok) {
-        queue.shift();
-        localStorage.setItem("queuedMessages", JSON.stringify(queue));
-        console.log("Queued message sent!");
-      }
-    } catch (err) {}
+      await api.post("/contacts", next);
+      queue.shift();
+      localStorage.setItem("queuedMessages", JSON.stringify(queue));
+    } catch {
+      // Server still unreachable; will retry on next interval tick.
+    }
   };
 
   useEffect(() => {
@@ -54,18 +49,11 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`http://localhost:3000/contacts`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) throw new Error("Server error");
-
+      await api.post("/contacts", formData);
       toast.success("Message sent successfully!");
-    } catch (error) {
+    } catch {
       saveToLocalQueue(formData);
-      toast.success("Message sent successfully!");
+      toast.info("Server unreachable. Your message has been saved and will be sent automatically when the connection is restored.");
     } finally {
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
       setSubmitted(true);

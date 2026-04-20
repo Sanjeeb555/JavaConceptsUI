@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import {
   Code,
   Layers,
@@ -9,6 +8,7 @@ import {
 } from "lucide-react";
 import { TiInputChecked } from "react-icons/ti";
 import methodImg from "../../../assets/methods/Picture1.png";
+import useFetch from "../../../hooks/useFetch";
 
 // Icon map
 const iconMap = {
@@ -24,14 +24,7 @@ const iconMap = {
 };
 
 const Method = () => {
-  const [methodsData, setMethodsData] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/methods")
-      .then((res) => setMethodsData(res.data))
-      .catch((err) => console.log(err));
-  }, []);
+  const { data: methodsData } = useFetch("/methods");
 
   return (
     <div className="min-h-screen w-full py-8 px-4">

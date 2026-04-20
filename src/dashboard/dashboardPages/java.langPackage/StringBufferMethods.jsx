@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import { Code, ClipboardList } from "lucide-react";
+import useFetch from "../../../hooks/useFetch";
 
 const ICONS = {
   method: <Code className="text-purple-600 dark:text-purple-300" size={24} />,
@@ -33,21 +33,10 @@ const ContentCard = ({ icon, title, children }) => (
 );
 
 const StringBufferMethods = () => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
+  const { data, loading, error } = useFetch("/stringBufferMethodsData", null);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/stringBufferMethodsData")
-      .then((response) => setData(response.data))
-      .catch((err) => {
-        setError("Failed to load data");
-        console.error(err);
-      });
-  }, []);
-
+  if (loading || !data) return <p className="text-center mt-10">Loading...</p>;
   if (error) return <p className="text-center mt-10 text-red-600">{error}</p>;
-  if (!data) return <p className="text-center mt-10">Loading...</p>;
 
   return (
     <div className="w-[95%] max-w-7xl mx-auto py-10">

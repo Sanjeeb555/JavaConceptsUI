@@ -1,82 +1,18 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import {
-  ChevronDown,
-  ChevronRight,
-  Code,
-  BookOpen,
-  Settings,
-  Layers,
-  Database,
-  Package,
-  Grid,
-  AlertTriangle,
-  HelpCircle,
-} from "lucide-react";
+import { ChevronDown, ChevronRight, Code } from "lucide-react";
+import { dashboardConfig } from "../config/dashboardConfig";
 
-const sidebarData = [
-  { title: "Introduction", links: [{ label: "Introduction", path: "/dashboard/introduction" }], icon: BookOpen },
-  { title: "Installation", links: [{ label: "Installation", path: "/dashboard/installation" }], icon: Settings },
-  { title: "Identifier", links: [{ label: "Identifier", path: "/dashboard/identifier" }], icon: Code },
-  { title: "Data Type", links: [{ label: "Data Type", path: "/dashboard/datatype" }], icon: Database },
-  { title: "Type Casting", links: [{ label: "Type Casting", path: "/dashboard/typecasting" }], icon: Layers },
-  { title: "Variables", links: [{ label: "Variables", path: "/dashboard/variables" }], icon: Package },
-  { title: "Operators", links: [{ label: "Operators", path: "/dashboard/operators" }], icon: Grid },
-  { title: "Flow Control", links: [{ label: "Flow Control", path: "/dashboard/flowcontrol" }], icon: Code },
-  {
-    title: "OOPS Concept",
-    icon: Layers,
-    links: [
-      { label: "Class", path: "/dashboard/oops/class" },
-      { label: "Methods", path: "/dashboard/oops/methods" },
-      { label: "Features of Method", path: "/dashboard/oops/features" },
-      { label: "Inheritance", path: "/dashboard/oops/inheritance" },
-      { label: "Method Overloading", path: "/dashboard/oops/overloading" },
-      { label: "Method Overriding", path: "/dashboard/oops/overriding" },
-      { label: "Modifiers", path: "/dashboard/oops/modifiers" },
-      { label: "Constructors", path: "/dashboard/oops/constructors" },
-      { label: "Interface", path: "/dashboard/oops/interface" },
-      { label: "Blocks", path: "/dashboard/oops/blocks" },
-      { label: "Object Type Casting", path: "/dashboard/oops/casting" },
-      { label: "Factory Method", path: "/dashboard/oops/factory" },
-      { label: "Singleton Class", path: "/dashboard/oops/singleton" },
-      { label: "Data Hiding", path: "/dashboard/oops/hiding" },
-      { label: "Abstraction", path: "/dashboard/oops/abstraction" },
-      { label: "Encapsulation", path: "/dashboard/oops/encapsulation" },
-      { label: "Polymorphism", path: "/dashboard/oops/polymorphism" },
-    ],
-  },
-  {
-    title: "java.lang Package",
-    icon: Package,
-    links: [
-      { label: "Object Class", path: "/dashboard/lang/objectclass" },
-      { label: "String Class", path: "/dashboard/lang/stringclass" },
-      { label: "String Class Methods", path: "/dashboard/lang/stringmethods" },
-      { label: "StringBuffer Class", path: "/dashboard/lang/stringbuffer" },
-      { label: "StringBuffer Class Methods", path: "/dashboard/lang/stringbuffermethods" },
-      { label: "StringBuilder Class", path: "/dashboard/lang/stringbuilder" },
-      { label: "Wrapper Class", path: "/dashboard/lang/wrapperclass" },
-      { label: "Wrapper Constructors", path: "/dashboard/lang/wrapperconstructors" },
-      { label: "Utility Methods", path: "/dashboard/lang/wrappermethods" },
-      { label: "Autoboxing/Autounboxing", path: "/dashboard/lang/autoboxing" },
-    ],
-  },
-  {
-    title: "Collection Framework",
-    icon: Grid,
-    links: [
-      { label: "CollectionFramework", path: "/dashboard/collection/framework" },
-      { label: "List", path: "/dashboard/collection/list" },
-      { label: "Set", path: "/dashboard/collection/set" },
-      { label: "Queue", path: "/dashboard/collection/queue" },
-      { label: "Map", path: "/dashboard/collection/map" },
-    ],
-  },
-  { title: "Arrays", links: [{ label: "Array", path: "/dashboard/arrays" }], icon: Database },
-  { title: "Exception Handling", links: [{ label: "Exception Handling", path: "/dashboard/exceptions" }], icon: AlertTriangle },
-  { title: "Interview Questions", links: [{ label: "Interview Questions", path: "/dashboard/interview" }], icon: HelpCircle },
-];
+// Derive sidebar data from the single source-of-truth config.
+// Each link gets a full absolute path by prepending /dashboard/.
+const sidebarData = dashboardConfig.map(({ title, icon, links }) => ({
+  title,
+  icon,
+  links: links.map(({ label, routePath }) => ({
+    label,
+    path: `/dashboard/${routePath}`,
+  })),
+}));
 
 const SidebarItem = memo(({ title, links, icon: Icon, isOpen, onClick }) => {
   return (

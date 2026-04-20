@@ -1,9 +1,9 @@
-import axios from "axios";
 import { Eye, EyeOff } from "lucide-react";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import api from "../lib/api";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -23,11 +23,15 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const { data } = await axios.get("http://localhost:3000/users");
-
-      const currentUser = data.find(
-        (user) => user.email === formData.email
+      // Fetch only the user matching the provided email (server-side filter).
+      // NOTE: Password comparison here is a temporary measure while a proper
+      // backend auth endpoint is not yet available. In production, credential
+      // validation and token issuance must be done server-side.
+      const { data } = await api.get(
+        `/users?email=${encodeURIComponent(formData.email)}`
       );
+
+      const currentUser = data[0];
 
       if (!currentUser) {
         toast.error("Invalid Email");
@@ -39,13 +43,12 @@ const Login = () => {
         return;
       }
 
-      const token = `abcde.${currentUser.id}`;
-      localStorage.setItem("jwt_token", token);
+      localStorage.setItem("jwt_token", currentUser.id);
       window.dispatchEvent(new Event("authChanged"));
       toast.success("Login successful!");
       navigate("/dashboard");
-    } catch (error) {
-      console.log(error.message);
+    } catch {
+      toast.error("Login failed. Please try again.");
     }
   };
 

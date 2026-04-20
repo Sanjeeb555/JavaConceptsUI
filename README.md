@@ -1,16 +1,88 @@
-# React + Vite
+# Java Concepts UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + Vite single-page application for learning core Java concepts with a json-server-powered backend.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Browse Java topics (Data Types, OOP, Collections, Exception Handling, and more) from a sidebar-driven dashboard
+- User authentication (register / login)
+- Contact form with offline queue – messages are stored locally and automatically retried when the server is reachable
+- Light / dark mode support
+- Responsive layout
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Layer | Technology |
+|---|---|
+| UI | React 19, Tailwind CSS 4, Framer Motion, Lucide React |
+| Routing | React Router v7 |
+| HTTP | Axios (via shared `src/lib/api.js` client) |
+| Mock API | json-server (reads `db.json`) |
+| Bundler | Vite 7 |
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Prerequisites
+
+- Node.js ≥ 18
+- npm ≥ 9
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Configure environment
+
+Copy `.env.example` and adjust as needed:
+
+```bash
+cp .env.example .env
+```
+
+The default `VITE_API_BASE_URL=http://localhost:3000` works with the bundled json-server setup.
+
+### Run the mock API
+
+```bash
+npx json-server --watch db.json --port 3000
+```
+
+### Run the development server
+
+```bash
+npm run dev
+```
+
+Open <http://localhost:5173> in your browser.
+
+### Build for production
+
+```bash
+npm run build
+```
+
+## Project Structure
+
+```
+src/
+├── config/
+│   └── dashboardConfig.jsx   # Single source of truth for sidebar links + route elements
+├── hooks/
+│   └── useFetch.js           # Reusable data-fetch hook (wraps shared API client)
+├── lib/
+│   └── api.js                # Axios instance (reads VITE_API_BASE_URL)
+├── dashboard/
+│   ├── Dashboard.jsx         # Layout with auto-generated sidebar
+│   └── dashboardPages/       # Individual topic pages
+├── pages/                    # Public pages (Home, Login, Register, Contact, …)
+└── routes/
+    └── routes.jsx            # Router (dashboard children auto-generated from config)
+```
+
+## Adding a New Topic
+
+1. Create the page component under `src/dashboard/dashboardPages/`.
+2. Add one entry to `src/config/dashboardConfig.jsx` – the sidebar and router are both derived from this file automatically.
+3. Add the corresponding data to `db.json`.

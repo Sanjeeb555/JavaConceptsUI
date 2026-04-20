@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import { Landmark, Wrench, ThumbsDown } from "lucide-react";
 import { FaJava } from "react-icons/fa6";
 import { TiInputChecked } from "react-icons/ti";
+import useFetch from "../../../hooks/useFetch";
 
 const iconMap = {
   Java: <FaJava className="text-purple-600 dark:text-purple-300" size={24} />,
@@ -12,27 +12,10 @@ const iconMap = {
 };
 
 const Introduction = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data, loading, error } = useFetch("/intro");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("http://localhost:3000/intro"); 
-        setData(res.data); 
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) {
-    return <p className="text-center mt-10 text-gray-500">Loading...</p>;
-  }
+  if (loading) return <p className="text-center mt-10 text-gray-500">Loading...</p>;
+  if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
 
   return (
     <div className="w-full py-8 px-4">

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import { RefreshCcw, ListChecks, GitBranch, Layers, Code } from "lucide-react";
 import { TiInputChecked } from "react-icons/ti";
+import useFetch from "../../../hooks/useFetch";
 
 const iconMap = {
   RefreshCcw: <RefreshCcw className="text-purple-600 dark:text-purple-300" size={24} />,
@@ -12,14 +12,7 @@ const iconMap = {
 };
 
 const Overriding = () => {
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/methodOverriding")
-      .then((res) => setCards(res.data))
-      .catch((err) => console.error(err));
-  }, []);
+  const { data: cards } = useFetch("/methodOverriding");
 
   return (
     <div className="min-h-screen w-full py-8 px-4">

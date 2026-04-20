@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import { ListChecks, Code, AlertTriangle, CheckCircle } from "lucide-react";
+import useFetch from "../../../hooks/useFetch";
 
 const ICONS = {
   compare: <ListChecks className="text-purple-600 dark:text-purple-300" size={24} />,
@@ -71,19 +71,11 @@ const ContentCard = ({ icon, title, children, className = "" }) => (
 );
 
 const WrapperConstructors = () => {
-  const [data, setData] = useState(null);
-  const [table, setTable] = useState([]);
+  const { data: rawData, loading } = useFetch("/wrapperData", null);
+  const data = rawData?.wrapperConstructors;
+  const table = rawData?.wrapperTypeTable ?? [];
 
-  useEffect(() => {
-    axios.get("http://localhost:3000/wrapperData")
-      .then(res => {
-        setData(res.data.wrapperConstructors);
-        setTable(res.data.wrapperTypeTable);
-      })
-      .catch(err => console.error(err));
-  }, []);
-
-  if (!data) return <p className="text-center mt-10">Loading...</p>;
+  if (loading || !data) return <p className="text-center mt-10">Loading...</p>;
 
   return (
     <div className="w-[95%] max-w-7xl mx-auto py-10">

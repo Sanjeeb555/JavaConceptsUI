@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
-import axios from "axios";
 import { Eye, EyeOff } from "lucide-react";
+import api from "../lib/api";
 
 const Registration = () => {
   const [formData, setFormData] = useState({
@@ -34,11 +34,11 @@ const Registration = () => {
     try {
       const { confirmPassword, ...payload } = formData;
 
-      await axios.post("http://localhost:3000/users", payload);
+      await api.post("/users", payload);
 
       toast.success("Signup successful!");
       navigate("/login");
-    } catch (error) {
+    } catch {
       toast.error("Registration failed");
     }
   };

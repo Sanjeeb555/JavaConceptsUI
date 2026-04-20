@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import { ListChecks } from "lucide-react";
+import useFetch from "../../../hooks/useFetch";
 
 const ICONS = {
   compare: (
@@ -29,18 +29,7 @@ const ContentCard = ({ icon, title, children }) => (
 );
 
 const StringBuilder = () => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/stringBuilderComparison")
-      .then((res) => setData(res.data))
-      .catch((err) => {
-        setError("Failed to load data");
-        console.error(err);
-      });
-  }, []);
+  const { data, error } = useFetch("/stringBuilderComparison", null);
 
   if (error)
     return <p className="text-center mt-10 text-red-600 font-semibold">{error}</p>;

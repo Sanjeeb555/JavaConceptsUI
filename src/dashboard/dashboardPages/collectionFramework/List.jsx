@@ -1,17 +1,10 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
+import useFetch from "../../../hooks/useFetch";
 
 const List = () => {
-  const [data, setData] = useState(null);
+  const { data, loading } = useFetch("/listData", null);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/listData")
-      .then((res) => setData(res.data))
-      .catch((err) => console.error(err));
-  }, []);
-
-  if (!data) {
+  if (loading || !data) {
     return <p className="text-center mt-10">Loading...</p>;
   }
 

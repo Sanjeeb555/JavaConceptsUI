@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import { Shield, Lock, FileCode, Layers, Code } from "lucide-react";
 import { TiInputChecked } from "react-icons/ti";
 import modifierImg from "../../../assets/modifiers/Picture1.png";
+import useFetch from "../../../hooks/useFetch";
 
 const iconMap = {
   Shield: <Shield className="text-blue-600 dark:text-blue-300" size={24} />,
@@ -13,14 +13,8 @@ const iconMap = {
 };
 
 const Modifiers = () => {
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-  axios
-    .get("http://localhost:3000/modifiers")
-    .then((res) => setCards(res.data.cards))
-    .catch((err) => console.error(err));
-}, []);
+  const { data: rawData } = useFetch("/modifiers", null);
+  const cards = rawData?.cards ?? [];
 
   return (
     <div className="min-h-screen w-full py-8 px-4">

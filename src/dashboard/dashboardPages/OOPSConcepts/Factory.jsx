@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Factory as FactoryIcon, Code } from "lucide-react";
 import { TiInputChecked } from "react-icons/ti";
-import axios from "axios";
+import useFetch from "../../../hooks/useFetch";
 
 const iconMap = {
   Factory: <FactoryIcon className="text-purple-600 dark:text-purple-300" size={24} />,
@@ -9,14 +9,8 @@ const iconMap = {
 };
 
 const Factory = () => {
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/factoryMethods")
-      .then(res => setCards(res.data.cards))
-      .catch(err => console.error(err));
-  }, []);
+  const { data: rawData } = useFetch("/factoryMethods", null);
+  const cards = rawData?.cards ?? [];
 
   return (
     <div className="min-h-screen w-full py-18 px-4">

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import { CheckCircle, Wrench } from "lucide-react";
+import useFetch from "../../../hooks/useFetch";
 
 const ICONS = {
   util: <Wrench className="text-purple-600 dark:text-purple-300" size={24} />,
@@ -78,31 +78,15 @@ const ContentCard = ({ section }) => (
 );
 
 const WrapperMethods = () => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/wrapperMethods")
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch(() => {
-        setError("Failed to load data.");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+  const { data, loading, error } = useFetch("/wrapperMethods", null);
 
   if (loading)
     return <p className="text-center mt-10 text-lg font-medium">Loading...</p>;
 
-  if (error)
+  if (error || !data)
     return (
       <p className="text-center mt-10 text-lg font-medium text-red-600">
-        {error}
+        {error || "Failed to load data."}
       </p>
     );
 

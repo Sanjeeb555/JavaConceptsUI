@@ -53,7 +53,7 @@ const Contact = () => {
       toast.success("Message sent successfully!");
     } catch {
       saveToLocalQueue(formData);
-      toast.info("Server unreachable. Your message has been saved and will be sent automatically when the connection is restored.");
+      toast.info("Message saved locally and will be sent when the connection is restored.");
     } finally {
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
       setSubmitted(true);
